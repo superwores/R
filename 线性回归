@@ -1,0 +1,45 @@
+x<-c(61.4,48.3,51.8,35.9,17.8,17,55,32.7,17,27.3,21.5,35.5,17,50,30,13.8)
+y<-c(26.13,23.49,21.97,11.53,7.18,6.8,18.43,11.69,6.8,9.69,7.99,12.15,6.8,17.2,9.5,5.52)
+plot(x,y)#画出散点图
+res<-lm(y~x)#回归分析
+summary(res)#回归分析参数估计与假设检验结果at
+dat<-data.frame(x=38)#令x=38
+pred<-predict(res,dat)#计算x=38时的预测值
+pred
+predp<-predict(res,dat,interval ="prediction",leve=0.95)#计算x=38是的预测值95%预测区间
+predp
+
+#实现结果
+> x<-c(61.4,48.3,51.8,35.9,17.8,17,55,32.7,17,27.3,21.5,35.5,17,50,30,13.8)
+> y<-c(26.13,23.49,21.97,11.53,7.18,6.8,18.43,11.69,6.8,9.69,7.99,12.15,6.8,17.2,9.5,5.52)
+> plot(x,y)#画出散点图
+> res<-lm(y~x)#回归分析
+> summary(res)#回归分析参数估计与假设检验结果at
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0425 -1.5456  0.3755  0.7146  4.7262 
+
+Coefficients:
+            Estimate Std.Error t value Pr(>|t|)    
+(Intercept) -0.76293    1.22097  -0.625    0.542    
+x            0.40428    0.03338  12.113  8.3e-09 ***
+---
+Signif.codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.036 on 14 degrees of freedom
+Multiple R-squared:  0.9129,    Adjusted R-squared:  0.9067 
+F-statistic: 146.7 on 1 and 14 DF,p-value: 8.295e-09
+
+> dat<-data.frame(x=38)#令x=38
+> pred<-predict(res,dat)#计算x=38时的预测值
+> pred
+      1 
+14.5997 
+> predp<-predict(res,dat,interval ="prediction",leve=0.95)#计算x=38是的预测值95%预测区间
+> predp
+      fit    lwr      upr
+1 14.5997 10.085 19.11441
