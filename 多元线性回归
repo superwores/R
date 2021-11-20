@@ -1,0 +1,101 @@
+> #建立y关于x1,x2,x3,x4,x5,x6的线性回归方程，数据为data
+> summary(lma)#模型汇总，给出模型回归系数的估计和显著性检验等
+
+Call:
+lm(formula = y ~ x1 + x2 + x3 + x4 + x5 + x6,data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.83614 -0.57561 -0.06547  0.66181  1.70485 
+
+Coefficients:
+            Estimate Std.Error t value Pr(>|t|)    
+(Intercept)  3.98433    2.26965   1.755 0.089056 .  
+x1           2.34751    1.76362   1.331 0.192872    
+x2           0.49731    0.30536   1.629 0.113516    
+x3           0.27841    0.34091   0.817 0.420357    
+x4           1.16987    0.30958   3.779 0.000673 ***
+x5          -0.69229    0.28483  -2.431 0.021058 *  
+x6          -0.03381    0.29568  -0.114 0.909694    
+---
+Signif.codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.181 on 31 degrees of freedom
+Multiple R-squared:  0.7207,    Adjusted R-squared:  0.6667 
+F-statistic: 13.33 on 6 and 31 DF,p-value: 2.037e-07
+> lm.step<-step(lma,direction="both")#用“一切子集回归法”来进行逐步回归
+Start:  AIC=18.9
+y ~ x1 + x2 + x3 + x4 + x5 + x6
+       Df Sum of Sq    RSS    AIC
+- x6    1    0.0182 43.248 16.916
+- x3    1    0.9300 44.160 17.709
+<none>              43.230 18.900
+- x1    1    2.4707 45.701 19.012
+- x2    1    3.6988 46.929 20.020
+- x5    1    8.2380 51.468 23.528
+- x4    1   19.9132 63.143 31.297
+Step:  AIC=16.92
+y ~ x1 + x2 + x3 + x4 + x5
+       Df Sum of Sq    RSS    AIC
+- x3    1    0.9118 44.160 15.709
+<none>              43.248 16.916
+- x1    1    2.4577 45.706 17.016
+- x2    1    4.2397 47.488 18.470
++ x6    1    0.0182 43.230 18.900
+- x5    1    8.5978 51.846 21.806
+- x4    1   19.8986 63.147 29.299
+Step:  AIC=15.71
+y ~ x1 + x2 + x4 + x5
+
+       Df Sum of Sq    RSS    AIC
+- x1    1    1.6936 45.853 15.139
+<none>              44.160 15.709
++ x3    1    0.9118 43.248 16.916
++ x6    1    0.0000 44.160 17.709
+- x2    1    5.3545 49.514 18.058
+- x5    1    8.0807 52.241 20.094
+- x4    1   27.3280 71.488 32.014
+Step:  AIC=15.14
+y ~ x2 + x4 + x5
+       Df Sum of Sq    RSS    AIC
+<none>              45.853 15.139
++ x1    1    1.6936 44.160 15.709
++ x3    1    0.1477 45.706 17.016
++ x6    1    0.0005 45.853 17.138
+- x2    1    6.6026 52.456 18.251
+- x5    1    6.9989 52.852 18.537
+- x4    1   25.6888 71.542 30.043
+> summary(lm.step)
+
+Call:
+lm(formula = y ~ x2 + x4 + x5,data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.5707 -0.6256  0.1521  0.6467  1.7741 
+
+Coefficients:
+            Estimate Std.Error t value Pr(>|t|)    
+(Intercept)   6.4672     1.3328   4.852 2.67e-05 ***
+x2            0.5801     0.2622   2.213 0.033740 *  
+x4            1.1997     0.2749   4.364 0.000113 ***
+x5           -0.6023     0.2644  -2.278 0.029127 *  
+---
+Signif.codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.161 on 34 degrees of freedom
+Multiple R-squared:  0.7038,    Adjusted R-squared:  0.6776 
+F-statistic: 26.92 on 3 and 34 DF,p-value: 4.203e-09
+
+
+> #给定解释变量x2,x4,x5的值
+> preds<-data.frame(x2=5.1,x4=5.5,x5=14)
+> #均值估计和均值的95%的置信区间
+> predict(lm.step,newdata=preds,interval="c",level=0.95)
+       fit      lwr      upr
+1 7.591574 2.364701 12.81845
+> #预测值与预测区间
+> predict(lm.step,newdata=preds,interval="prediction",level=0.95)
+       fit      lwr      upr
+1 7.591574 1.856588 13.32656
+>
